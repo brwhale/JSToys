@@ -168,7 +168,7 @@ function rot(input) {
 	return input;
 }
 let count = 0;
-let max_frames = 1500;
+let max_frames = 1450;
 function animate(frametime) {
 	if (playing && count < max_frames) {
 		count++;
@@ -176,12 +176,14 @@ function animate(frametime) {
 		animC+=changeamt;
 		changeamt+=0.01*changeamt;
 		plotLine(linfunc3animC);
+	} else {
+		playing = false;
 	}
 	window.requestAnimationFrame(animate);
 }
 function toggle() {
 	if (!playing) {
-		if (count > max_frames) {
+		if (count >= max_frames) {
 			count = 0;
 			animC = 0.00000000000001;
 			changeamt = 0.000001;
