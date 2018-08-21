@@ -7,6 +7,8 @@ let camera = {x:0,y:0,zoom:10,aspect:screen_width/screen_height};
 let gridScale = 1;
 let curve_resolution = 0.1;
 
+let playing = false;
+
 // functions to draw lines
 function mapPointToScreenSpace(point) {
 	let scale = screen_width/(2*camera.zoom);
@@ -37,7 +39,7 @@ function strokePoints(points){
 	context.stroke();
 }
 function plotLine(fnc) {
-	strokePoints(curveAsPoints(fnc, -10, 10));	
+	strokePoints(curveAsPoints(fnc, -camera.zoom, camera.zoom));	
 }
 
 function makeimg() {
@@ -90,9 +92,34 @@ function linfunc3(x){
 	let sc = c*Math.tan(x/(c*2));
 	return {x:x,y:sc};
 }
+// looks like 5/x but wiggly?
 function linfunc3lowC(x){
-	let c = 0.01;
+	let c = 0.006366296506402909;
 	let sc = c*Math.tan(x/(c*2));
+	return {x:x,y:sc};
+}
+// looks weird as shit
+function linfunc3lowCSolvedtry1(x){
+	let c = (0.02)/Math.PI;
+	let sc = c*Math.tan(x/(c*2));
+	return {x:x,y:sc};
+}
+// looks weird as shit
+function linfunc3lowCSolved(x){
+	let c = 0.006366197723675815; // last digit here makes prety dramatic changes
+	let sc = c*Math.tan(x/(c*2));
+	return {x:x,y:sc};
+}
+// 50/x but wiggly
+function linfunc3lowC2(x){
+	let c = 0.06366341738721865;
+	let sc = c*Math.tan(x/(c*2));
+	return {x:x,y:sc};
+}
+let animC = 0.00000000000001;
+let changeamt = 0.000001;
+function linfunc3animC(x){
+	let sc = animC*Math.tan(x/(animC*2));
 	return {x:x,y:sc};
 }
 
@@ -108,21 +135,51 @@ strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
 strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
 
 // test lines
-context.strokeStyle = 'red';
-plotLine(linfunc1);
-context.strokeStyle = 'green';
-plotLine(qfunc);
-context.strokeStyle = 'blue';
-plotLine(trigfnc);
-context.strokeStyle = 'purple';
-plotLine(weirdfunc);
-context.strokeStyle = 'orange';
-plotLine(polar);
-context.strokeStyle = 'magenta';
-plotLine(polarHalf);
+// context.strokeStyle = 'red';
+// plotLine(linfunc1);
+// context.strokeStyle = 'green';
+// plotLine(qfunc);
+// context.strokeStyle = 'blue';
+// plotLine(trigfnc);
+// context.strokeStyle = 'purple';
+// plotLine(weirdfunc);
+// context.strokeStyle = 'orange';
+// plotLine(polar);
+// context.strokeStyle = 'magenta';
+// plotLine(polarHalf);
 context.strokeStyle = 'lightcoral';
 plotLine(linfunc2);
-context.strokeStyle = 'yellowgreen';
-plotLine(linfunc3);
 context.strokeStyle = 'Turquoise';
 plotLine(linfunc3lowC);
+context.strokeStyle = 'Maroon';
+plotLine(linfunc3lowC2);
+context.strokeStyle = 'yellow';
+plotLine(linfunc3lowCSolved);
+
+function rot(input) {
+	while (input < 0) input += 360;
+	while (input > 360) input -= 360;
+	return input;
+}
+let count = 0;
+let max_frames = 3000;
+function animate(frametime) {
+	if (playing && count < max_frames) {
+		count++;
+		context.strokeStyle = "hsl("+rot(count)+",100%,50%)";
+		animC+=changeamt;
+		changeamt+=0.01*changeamt;
+		console.log(animC);
+		plotLine(linfunc3animC);
+	}
+	window.requestAnimationFrame(animate);
+}
+function toggle() {
+	if (!playing) {
+		if (count > max_frames) {
+			count = 0;
+		}
+	}
+	playing = !playing;
+}
+animate(0);
