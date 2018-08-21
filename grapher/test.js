@@ -5,7 +5,7 @@ let screen_height = context.canvas.clientHeight;
 let screen_width = context.canvas.clientWidth;
 let camera = {x:0,y:0,zoom:100,aspect:screen_width/screen_height};
 let gridScale = 1;
-let curve_resolution = 0.005;
+let curve_resolution = 0.1;
 
 let playing = false;
 
@@ -128,15 +128,15 @@ function linfunc3animC(x){
 }
 
 // draw grid
-context.strokeStyle = 'white';
-context.lineWidth = 0.5;
-for (let i = -camera.zoom; i < camera.zoom; i+=gridScale) {
-	strokePoints([{x:-camera.zoom,y:i},{x:camera.zoom,y:i}]);
-	strokePoints([{x:i,y:-camera.zoom},{x:i,y:camera.zoom}]);
-}
-context.lineWidth = 2;
-strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
-strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
+// context.strokeStyle = 'white';
+// context.lineWidth = 0.5;
+// for (let i = -camera.zoom; i < camera.zoom; i+=gridScale) {
+// 	strokePoints([{x:-camera.zoom,y:i},{x:camera.zoom,y:i}]);
+// 	strokePoints([{x:i,y:-camera.zoom},{x:i,y:camera.zoom}]);
+// }
+ context.lineWidth = 1;
+// strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
+// strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
 
 // test lines
 // context.strokeStyle = 'red';
@@ -151,13 +151,13 @@ strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
 // plotLine(polar);
 // context.strokeStyle = 'magenta';
 // plotLine(polarHalf);
-context.strokeStyle = 'lightcoral';
-plotLine(linfunc2);
-context.strokeStyle = 'Turquoise';
-plotLine(linfunc3lowC);
-context.strokeStyle = 'Maroon';
-plotLine(linfunc3lowC2);
-context.strokeStyle = 'yellow';
+//context.strokeStyle = 'lightcoral';
+//plotLine(linfunc2);
+//context.strokeStyle = 'Turquoise';
+//plotLine(linfunc3lowC);
+//context.strokeStyle = 'Maroon';
+//plotLine(linfunc3lowC2);
+//context.strokeStyle = 'yellow';
 //plotLine(linfunc3lowCSolved);
 
 function rot(input) {
@@ -174,6 +174,7 @@ function animate(frametime) {
 		animC+=changeamt;
 		changeamt+=0.01*changeamt;
 		plotLine(linfunc3animC);
+		if (count == max_frames) makeimg();
 	} else {
 		playing = false;
 	}
