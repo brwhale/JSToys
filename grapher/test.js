@@ -5,7 +5,7 @@ let screen_height = context.canvas.clientHeight;
 let screen_width = context.canvas.clientWidth;
 let camera = {x:0,y:0,zoom:10,aspect:screen_width/screen_height};
 let gridScale = 1;
-let curve_resolution = 0.1;
+let curve_resolution = 0.0002;
 
 let playing = false;
 
@@ -100,13 +100,19 @@ function linfunc3lowC(x){
 }
 // looks weird as shit
 function linfunc3lowCSolvedtry1(x){
-	let c = (0.02)/Math.PI;
+	let c = (0.02)/Math.PI; // aka 1/50pi
 	let sc = c*Math.tan(x/(c*2));
 	return {x:x,y:sc};
 }
 // looks weird as shit
+function linfunc3lowCSolvedtry2(x){
+	let c = 1/(50*Math.PI); // aka 1/50pi
+	let sc = Math.tan(25*x*Math.PI)/(50*Math.PI);
+	return {x:x,y:sc};
+}
+// looks weird as shit
 function linfunc3lowCSolved(x){
-	let c = 0.006366197723675815; // last digit here makes prety dramatic changes
+	let c = 0.006366197723675813430; // last bit after 67581 here makes prety dramatic changes
 	let sc = c*Math.tan(x/(c*2));
 	return {x:x,y:sc};
 }
@@ -154,7 +160,7 @@ plotLine(linfunc3lowC);
 context.strokeStyle = 'Maroon';
 plotLine(linfunc3lowC2);
 context.strokeStyle = 'yellow';
-plotLine(linfunc3lowCSolved);
+//plotLine(linfunc3lowCSolved);
 
 function rot(input) {
 	while (input < 0) input += 360;
@@ -162,14 +168,13 @@ function rot(input) {
 	return input;
 }
 let count = 0;
-let max_frames = 3000;
+let max_frames = 1500;
 function animate(frametime) {
 	if (playing && count < max_frames) {
 		count++;
 		context.strokeStyle = "hsl("+rot(count)+",100%,50%)";
 		animC+=changeamt;
 		changeamt+=0.01*changeamt;
-		console.log(animC);
 		plotLine(linfunc3animC);
 	}
 	window.requestAnimationFrame(animate);
@@ -178,6 +183,8 @@ function toggle() {
 	if (!playing) {
 		if (count > max_frames) {
 			count = 0;
+			animC = 0.00000000000001;
+			changeamt = 0.000001;
 		}
 	}
 	playing = !playing;
