@@ -3,16 +3,16 @@ context.font = "12px Helvetica";
 
 let screen_height = context.canvas.clientHeight;
 let screen_width = context.canvas.clientWidth;
-let camera = {x:0,y:0,zoom:10,aspect:screen_width/screen_height};
+let camera = {x:0,y:0,zoom:100,aspect:screen_width/screen_height};
 let gridScale = 1;
-let curve_resolution = 0.0002;
+let curve_resolution = 0.005;
 
 let playing = false;
 
 // functions to draw lines
 function mapPointToScreenSpace(point) {
-	let scale = screen_width/(2*camera.zoom);
-	return {x:(camera.zoom+point.x)*scale,y:(camera.zoom-point.y)*scale}
+	let scale = screen_height/(2*camera.zoom);
+	return {x:(camera.zoom+point.x)*scale*camera.aspect,y:(camera.zoom-point.y)*scale}
 }
 
 function getNPoints(fnc, min, n) {
@@ -43,11 +43,9 @@ function plotLine(fnc) {
 }
 
 function makeimg() {
-	if (rendering) {
-		let image = document.createElement("img");
-		image.src =	document.getElementById('animation').toDataURL("img/png");
-		document.getElementById('imgdrop').prepend(image);
-	}
+	let image = document.createElement("img");
+	image.src =	document.getElementById('animation').toDataURL("img/png");
+	document.getElementById('imgdrop').prepend(image);
 }
 
 //test funcions to graph
@@ -131,12 +129,12 @@ function linfunc3animC(x){
 
 // draw grid
 context.strokeStyle = 'white';
-context.lineWidth = 1;
+context.lineWidth = 0.5;
 for (let i = -camera.zoom; i < camera.zoom; i+=gridScale) {
 	strokePoints([{x:-camera.zoom,y:i},{x:camera.zoom,y:i}]);
 	strokePoints([{x:i,y:-camera.zoom},{x:i,y:camera.zoom}]);
 }
-context.lineWidth = 3;
+context.lineWidth = 2;
 strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
 strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
 
@@ -168,7 +166,7 @@ function rot(input) {
 	return input;
 }
 let count = 0;
-let max_frames = 1450;
+let max_frames = 1550;
 function animate(frametime) {
 	if (playing && count < max_frames) {
 		count++;
