@@ -3,9 +3,9 @@ context.font = "12px Helvetica";
 
 let screen_height = context.canvas.clientHeight;
 let screen_width = context.canvas.clientWidth;
-let camera = {x:0,y:0,zoom:100,aspect:screen_width/screen_height};
+let camera = {x:0,y:0,zoom:10000,aspect:screen_width/screen_height};
 let gridScale = 1;
-let curve_resolution = 0.1;
+let curve_resolution = camera.zoom/screen_width;
 
 let playing = false;
 
@@ -151,8 +151,8 @@ function linfunc3animC(x){
 // plotLine(polar);
 // context.strokeStyle = 'magenta';
 // plotLine(polarHalf);
-//context.strokeStyle = 'lightcoral';
-//plotLine(linfunc2);
+context.strokeStyle = 'lightcoral';
+plotLine(linfunc2);
 //context.strokeStyle = 'Turquoise';
 //plotLine(linfunc3lowC);
 //context.strokeStyle = 'Maroon';
@@ -166,7 +166,7 @@ function rot(input) {
 	return input;
 }
 let count = 0;
-let max_frames = 1550;
+let max_frames = 15500;
 function animate(frametime) {
 	if (playing && count < max_frames) {
 		count++;
