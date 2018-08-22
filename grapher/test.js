@@ -3,7 +3,7 @@ context.font = "12px Helvetica";
 
 let screen_height = context.canvas.clientHeight;
 let screen_width = context.canvas.clientWidth;
-let camera = {x:0,y:0,zoom:10000,aspect:screen_width/screen_height};
+let camera = {x:0,y:0,zoom:1000,aspect:screen_width/screen_height};
 let gridScale = 1;
 let curve_resolution = camera.zoom/screen_width;
 
@@ -87,58 +87,60 @@ function linfunc2(x){
 }
 function linfunc3(x){
 	let c = 1/0.000000004;
-	let sc = c*Math.tan(x/(c*2));
-	return {x:x,y:sc};
-}
-// looks like 5/x but wiggly?
-function linfunc3lowC(x){
-	let c = 0.006366296506402909;
-	let sc = c*Math.tan(x/(c*2));
+	let sc = c*Math.tan(x/(c));
 	return {x:x,y:sc};
 }
 // looks weird as shit
 function linfunc3lowCSolvedtry1(x){
 	let c = (0.02)/Math.PI; // aka 1/50pi
-	let sc = c*Math.tan(x/(c*2));
+	let sc = c*Math.tan(x/c);
 	return {x:x,y:sc};
 }
 // looks weird as shit
 function linfunc3lowCSolvedtry2(x){
-	let c = 1/(50*Math.PI); // aka 1/50pi
-	let sc = Math.tan(25*x*Math.PI)/(50*Math.PI);
+	let c = 1/(50*Math.PI);
+	let sc = Math.tan(x/c)*c;
 	return {x:x,y:sc};
 }
 // looks weird as shit
 function linfunc3lowCSolved(x){
 	let c = 0.006366197723675813430; // last bit after 67581 here makes prety dramatic changes
-	let sc = c*Math.tan(x/(c*2));
+	let sc = c*Math.tan(x/(c));
+	return {x:x,y:sc};
+}
+// looks like 5/x but wiggly?
+function linfunc3lowC(x){
+	//let c = 0.006366296506402909;
+	let c = 1/(50*Math.PI) + 0.00000000000001;
+	let sc = c*Math.tan(x/(c));
 	return {x:x,y:sc};
 }
 // 50/x but wiggly
 function linfunc3lowC2(x){
-	let c = 0.06366341738721865;
-	let sc = c*Math.tan(x/(c*2));
+	//let c = 0.06366341738721865;
+	let c = 1/(50*Math.PI) - 0.00000000000001;
+	let sc = c*Math.tan(x/(c));
 	return {x:x,y:sc};
 }
 let animC = 0.00000000000001;
-let changeamt = 0.000001;
+let changeamt = 0.00000001;
 function linfunc3animC(x){
-	let sc = animC*Math.tan(x/(animC*2));
+	let sc = animC*Math.tan(x/animC);
 	return {x:x,y:sc};
 }
 
 // draw grid
-// context.strokeStyle = 'white';
+context.strokeStyle = 'white';
 // context.lineWidth = 0.5;
 // for (let i = -camera.zoom; i < camera.zoom; i+=gridScale) {
 // 	strokePoints([{x:-camera.zoom,y:i},{x:camera.zoom,y:i}]);
 // 	strokePoints([{x:i,y:-camera.zoom},{x:i,y:camera.zoom}]);
 // }
- context.lineWidth = 1;
-// strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
-// strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
+context.lineWidth = 1;
+strokePoints([{x:-camera.zoom,y:0},{x:camera.zoom,y:0}]);
+strokePoints([{x:0,y:-camera.zoom},{x:0,y:camera.zoom}]);
 
-// test lines
+// test lines, uncomment to draw specific lines
 // context.strokeStyle = 'red';
 // plotLine(linfunc1);
 // context.strokeStyle = 'green';
@@ -151,14 +153,14 @@ function linfunc3animC(x){
 // plotLine(polar);
 // context.strokeStyle = 'magenta';
 // plotLine(polarHalf);
-context.strokeStyle = 'lightcoral';
-plotLine(linfunc2);
+//context.strokeStyle = 'lightcoral';
+//plotLine(linfunc1);
 //context.strokeStyle = 'Turquoise';
 //plotLine(linfunc3lowC);
 //context.strokeStyle = 'Maroon';
 //plotLine(linfunc3lowC2);
-//context.strokeStyle = 'yellow';
-//plotLine(linfunc3lowCSolved);
+context.strokeStyle = 'yellow';
+plotLine(linfunc3lowCSolvedtry2);
 
 function rot(input) {
 	while (input < 0) input += 360;
