@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sudoku Solver by Garrett Skelton</title>
+	</head>
+<style>
+table {
+border-spacing: 0px;
+box-sizing: border-box;
+display: block;
+max-width: 420px;
+}
+tr {
+display: inline-block;
+}
+td {
+width: 40px;
+height: 40px;
+display: inline-block;
+}
+td:nth-child(3n+1) {
+margin-left: 10px;
+}
+tr:nth-child(3n+1) {
+margin-top: 10px;
+}
+input {
+padding: 0;
+width: 40px;
+height: 40px;
+font-size: 36px;
+text-align: center;
+}
+</style>
+<body>
+	<h1>Sudoku Solver</h1>
+	<div id="puzzle"></div>
+</body>
+<script src="sudoku.js"></script>
+</html>
